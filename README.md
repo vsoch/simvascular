@@ -9,12 +9,32 @@ The intended use case is the following:
 
 ## Run via Singularity
 
-
-The easiest thing to do is then run via Singularity
+The easiest thing to do is then run via Singularity. You can pull the container
+first.
 
 ```bash
 singularity pull --name simvascular docker://vanessa/simvascular
+```
+
+## Run the simvascular interface
+
+By default, the container entrypoint is to the executable `simvascular` that will
+open up the interface:
+
+```bash
 singularity run simvascular
+```
+
+If you want to use the solver, do this:
+
+```bash
+singularity exec simvascular svsolver
+```
+
+or the svfsi solver (not sure about the difference)
+
+```bash
+singularity exec simvascular svfsi
 ```
 
 # Development
