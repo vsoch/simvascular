@@ -20,6 +20,7 @@ singularity run simvascular
 # Development
 
 ## Build
+
 If you re-obtain a new binary, you can build like this. Note that you will
 need to update the [Dockerfile](Dockerfile) with the version you downloaded.
 
@@ -29,7 +30,8 @@ docker build -t vanessa/simvascular .
 
 ## Push
 
-You can then tag and push to Dockerhub (this is how @vsoch does it)
+You can then tag and push to Dockerhub (this is how @vsoch does it) to
+the repository [vanessa/simvascular](https://hub.docker.com/r/vanessa/simvascular/).
 
 ```bash
 docker tag vanessa/simvascular:latest vanessa/simvascular:2018-11-25
