@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:14.04
 
 # docker build -t vanessa/simvascular .
 # docker tag vanessa/simvascular:latest vanessa/simvascular:2018-11-25
@@ -20,6 +20,8 @@ RUN mkdir -p /code && \
                        xorg \ 
                        libgomp1 \
                        libasound2 \
+                       dcmtk \
+                       libicu52 \
                        openbox
 
 ADD SimVascular-ubuntu-x64-2018.11.25.deb /code
