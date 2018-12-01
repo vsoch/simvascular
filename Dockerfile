@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # docker build -t vanessa/simvascular .
 # docker tag vanessa/simvascular:latest vanessa/simvascular:2018-11-25
@@ -11,42 +11,46 @@ ENV PATH $PATH:/usr/local/sv/simvascular/2018-11-25
 
 RUN mkdir -p /code && \
     apt-get update && \
-    apt-get install -y software-properties-common && \
-    apt-add-repository ppa:ubuntu-toolchain-r/test && \
-    apt-get update && \
-    apt-get install -y gcc-4.9 g++-4.9
-    
-RUN apt-get install -y libssl1.0.0 \
+    apt-get install -y libssl1.0.0 \
                        libssl-dev \
                        libx11-6 \
                        libxss1 \
-                       libxslt-dev \
                        libgl1-mesa-glx \
                        libxtst6 \
                        xorg \ 
                        libgomp1 \
                        libasound2 \
-                       dcmtk \
-                       libicu52 \
                        openbox \
-                       libgstreamer0.10-0 \
-                       libgstreamer-plugins-base0.10-dev \
-                       libxi-dev \
-                       libxmu-dev \
-                       libmpich2-dev \
-                       libatlas-base-dev \
+                       wget \
+                       g++ \
+                       build-essential \
+                       libmpich-dev \
                        libnss3 \
-                       openmpi-bin \
-                       openmpi-common \ 
-                       libopenmpi-dev \
-                       wget 
+                       libxmu-dev \
+                       libxslt-dev \
+                       dcmtk \
+                       libxi-dev \
+                       libatlas-base-dev \
+                       python3 \
+                       python3-pip
 
-RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz && \
-    tar -xzvf openmpi-3.1.2.tar.gz && \
-    cd openmpi-3.1.2 && \
+ADD SimVascular-ubuntu-x64-2018.11.25.deb /code
+RUN dpkg -i /code/SimVascular-ubuntu-x64-2018.11.25.deb && \
+    ./usr/local/sv/simvascular/2018-11-25/setup-symlinks.sh && \
+    export PATH=$PATH:/usr/local/sv/simvascular/2018-11-25
+
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.7.tar.gz && \
+    tar -xzvf openmpi-1.10.7.tar.gz && \
+    cd openmpi-1.10.7 && \
     ./configure --prefix=/usr/local && \
     make && \
     make install
+
+RUN wget http://ftp.br.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u7_amd64.deb && \
+    libicu52_52.1-8+deb8u7_amd64.deb && \
+    wget http://mitk.org/download/releases/MITK-Diffusion-2017.07/Linux/MITK-Diffusion-2017.07-linux64.tar.gz && \
+    tar -xzvf MITK-Diffusion-2017.07-linux64.tar.gz && \
+    cd MITK-Diffusion-2017.07-linux64
 
 ADD SimVascular-ubuntu-x64-2018.11.25.deb /code
 ADD svSolver-2017-08-14-Linux-64bit.deb /code

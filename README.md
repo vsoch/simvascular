@@ -31,7 +31,10 @@ If you want to use the solver, do this:
 singularity exec simvascular svsolver
 ```
 
-or the svfsi solver (not sure about the difference)
+or the svfsi solver (not sure about the difference) - note that you need mpi 1.10 on the
+host for this to work. You probably don't have it (it's not on Sherlock). Sorry. See
+[this issue](https://github.com/SimVascular/SimVascular/issues/368#issuecomment-443385120) 
+to see why it's needed and there's nothing I can do about it.
 
 ```bash
 singularity exec simvascular svfsi
