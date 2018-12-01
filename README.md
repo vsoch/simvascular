@@ -25,10 +25,22 @@ open up the interface:
 singularity run simvascular
 ```
 
+![img/simvascular.png](img/simvascular.png)
+
 If you want to use the solver, do this:
 
 ```bash
 singularity exec simvascular svsolver
+
+The process ID for myrank (0) is (23395).
+
+
+The number of processes is 1.
+
+Solver Input Files listed as below:
+------------------------------------
+ Local Config: solver.inp 
+ Input file does not exist or is empty or perhaps you forgot mpirun?
 ```
 
 or the svfsi solver (not sure about the difference) - note that you need mpi 1.10 on the
@@ -38,6 +50,13 @@ to see why it's needed and there's nothing I can do about it.
 
 ```bash
 singularity exec simvascular svfsi
+```
+
+Note that if you are on sherlock, you can always load additional libraries that you need,
+a simple search with spider looks like this:
+
+```bash
+module spider mpi
 ```
 
 # Development

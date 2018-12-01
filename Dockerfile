@@ -47,7 +47,7 @@ RUN wget https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.7.tar
     make install
 
 RUN wget http://ftp.br.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u7_amd64.deb && \
-    libicu52_52.1-8+deb8u7_amd64.deb && \
+    dpkg -i libicu52_52.1-8+deb8u7_amd64.deb && \
     wget http://mitk.org/download/releases/MITK-Diffusion-2017.07/Linux/MITK-Diffusion-2017.07-linux64.tar.gz && \
     tar -xzvf MITK-Diffusion-2017.07-linux64.tar.gz && \
     cd MITK-Diffusion-2017.07-linux64
