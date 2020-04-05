@@ -6,9 +6,15 @@ master branch, and SvSolver from [it's respective repository](https://github.com
 If you intend to use this to build a container for research,
 you should customize the Dockerfile build to install a release.
 
+**Note** Both containers are using OpenMPI version 1.10.7 with an ubuntu 18.04 base!
+We will want to make a build recipe with a grid of builds that provide the bases and
+MPI flavors and versions that are most commonly needed.
+
 The intended use case is the following:
 
 # SimVascular
+
+ - [Development containers on Docker Hub](https://hub.docker.com/r/vanessa/simvascular)
 
 ## Build
 
@@ -44,6 +50,7 @@ singularity pull docker://vanessa/simvascular:2020-04
 
 ## Usage
 
+
 ### Singularity
 
 The easiest thing to do is then run via Singularity. You can pull the container
@@ -74,8 +81,6 @@ Solver Input Files listed as below:
  Input file does not exist or is empty or perhaps you forgot mpirun?
 ```
 
-**under development, @vsoch is going to sleep for now**
-
 or the svfsi solver (not sure about the difference) - note that you need mpi 1.10 on the
 host for this to work. You probably don't have it (it's not on Sherlock). Sorry. See
 [this issue](https://github.com/SimVascular/SimVascular/issues/368#issuecomment-443385120) 
@@ -93,6 +98,9 @@ module spider mpi
 ```
 
 # svSolver
+
+ - [Development containers on Docker Hub](https://hub.docker.com/r/vanessa/svsolver)
+
 
 ## Build
 
