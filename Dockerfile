@@ -7,6 +7,7 @@ FROM ubuntu:18.04
 
 LABEL Maintainer vsochat@stanford.edu
 ENV DEBIAN_FRONTEND noninteractive
+ENV LD_LIBRARY_PATH=/code/SimVascularSrc/BuildWithMake/Bin/QtWebEngine:/code/SimVascularSrc/BuildWithMake/Lib/x64_linux
 
 RUN apt-get update && \
     apt-get install -y git apt-utils wget
@@ -22,4 +23,13 @@ RUN git clone https://github.com/SimVascular/SimVascular.git SimVascularSrc && \
 RUN cd /code/SimVascularSrc/BuildWithMake && \
     /bin/bash quick-build-linux.sh
 
-ENTRYPOINT ["sv"]
+# Install some version of open MPI https://www.open-mpi.org/software/ompi/v4.0/
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.7.tar.gz && \
+    tar -xzvf openmpi-1.10.7.tar.gz && \
+    cd openmpi-1.10.7 && \
+    ./configure --prefix=/usr/local && \
+    make && \
+    make install
+
+# also look in BuildWithmake/Bin
+ENTRYPOINT ["/code/SimVascularSrc/BuildWithMake/sv"]

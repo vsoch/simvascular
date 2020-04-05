@@ -18,6 +18,14 @@ RUN git clone https://github.com/SimVascular/svSolver.git && \
     cd svSolver/BuildWithMake && \
     /bin/bash quick-build-linux.sh
 
+# Install some version of open MPI https://www.open-mpi.org/software/ompi/v4.0/
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.10/openmpi-1.10.7.tar.gz && \
+    tar -xzvf openmpi-1.10.7.tar.gz && \
+    cd openmpi-1.10.7 && \
+    ./configure --prefix=/usr/local && \
+    make && \
+    make install
+
 # Binaries (with .exe extensions?) are here
-env PATH=/code/svSolver/BuildWithMake/Bin:$PATH
+ENV PATH /code/svSolver/BuildWithMake/Bin:$PATH
 ENTRYPOINT ["svsolver-nompi.exe"]
