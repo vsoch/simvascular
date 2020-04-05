@@ -1,29 +1,60 @@
-# SimVascular
+# SimVascular and SvSolver
 
-This is a Docker build of SimVascular, intended to be run with Singularity.
-The binary is not included here, but you can get it [from their site]().
+These are Docker builds of SimVascular and SvSolver intended to be run with Singularity.
+It clones and builds simvascular from the [SimVascular](https://github.com/Simvascular/SimVascular) repository
+master branch, and SvSolver from [it's respective repository]([SimVascular](https://github.com/Simvascular/SimVascular). 
+If you intend to use this to build a container for research,
+you should customize the Dockerfile build to install a release.
 
 The intended use case is the following:
 
-# Usage
+# SimVascular
 
-## Run via Singularity
+## Build
 
-The easiest thing to do is then run via Singularity. You can pull the container
-first.
+Clone the repository
 
 ```bash
-singularity pull --name simvascular docker://vanessa/simvascular
+git clone https://github.com/vsoch/simvasvular
+cd simvascular
 ```
 
-## Run the simvascular interface
+Build the container, and tag:
+
+```bash
+docker build -t vanessa/simvascular .
+docker tag vanessa/simvascular:latest vanessa/simvascular:2020-04
+```
+
+You can then pull directly from your Docker daemon:
+
+```bash
+singularity pull docker-daemon://vanessa/simvascular:2020-04
+```
+
+You can transfer (e.g., with scp) the container, or even better, 
+if you want you can push to some Docker Registry to share or pull from another
+host (e.g., your cluster):
+
+```bash
+# pushes all tags
+docker push vanessa/simvascular
+singularity pull docker://vanessa/simvascular:2020-04
+```
+
+## Usage
+
+### Singularity
+
+The easiest thing to do is then run via Singularity. You can pull the container
+first (see above) and then run the container:
+
+```bash
+singularity run simvascular_2020-04.sif
+```
 
 By default, the container entrypoint is to the executable `simvascular` that will
 open up the interface:
-
-```bash
-singularity run simvascular
-```
 
 ![img/simvascular.png](img/simvascular.png)
 
@@ -43,6 +74,8 @@ Solver Input Files listed as below:
  Input file does not exist or is empty or perhaps you forgot mpirun?
 ```
 
+**under development, @vsoch is going to sleep for now**
+
 or the svfsi solver (not sure about the difference) - note that you need mpi 1.10 on the
 host for this to work. You probably don't have it (it's not on Sherlock). Sorry. See
 [this issue](https://github.com/SimVascular/SimVascular/issues/368#issuecomment-443385120) 
@@ -59,24 +92,67 @@ a simple search with spider looks like this:
 module spider mpi
 ```
 
-# Development
+# svSolver
 
 ## Build
 
-If you re-obtain a new binary, you can build like this. Note that you will
-need to update the [Dockerfile](Dockerfile) with the version you downloaded.
+You can again build the svSolver from the [svSolver](Dockerfile.svsolver) Dockerfile.
 
 ```bash
-docker build -t vanessa/simvascular .
+docker build -f Dockerfile.svsolver -t vanessa/svsolver .
+docker tag vanessa/svsolver:latest vanessa/svsolver:2020-04
 ```
 
-## Push
-
-You can then tag and push to Dockerhub (this is how @vsoch does it) to
-the repository [vanessa/simvascular](https://hub.docker.com/r/vanessa/simvascular/).
+And pull with Singularity from your docker daemon.
 
 ```bash
-docker tag vanessa/simvascular:latest vanessa/simvascular:2018-11-25
-docker push vanessa/simvascular
+singularity pull docker-daemon://vanessa/svsolver
 ```
 
+You can also push to a Docker registry to pull to some host:
+
+```bash
+docker push vanessa/svsolver
+singularity pull docker://vanessa/svsolver:2020-04
+```
+
+## Usage
+
+### Docker
+
+You can try running the Docker container, but it likely isn't so useful without MPI:
+
+```bash
+$ docker run -it vanessa/svsolver
+
+The process ID for myrank (0) is (1).
+
+
+The number of processes is 1.
+
+Solver Input Files listed as below:
+------------------------------------
+ Local Config: solver.inp 
+ Input file does not exist or is empty or perhaps you forgot mpirun? 
+```
+
+### Singularity
+
+For Singularity, you can first pull the image from your remote registry:
+
+```bash
+singularity pull docker://vanessa/svsolver:2020-04
+```
+
+The entrypoint is to binaries in /code/svSolver/BuildWithMake/Bin, which
+are intended for linux but have .exe extensions:
+
+```bash
+$ docker run -it --entrypoint bash vanessa/svsolver
+root@47d1dee35d17:/code# ls svSolver/BuildWithMake/Bin/
+svpost-gcc-gfortran.exe  svpost.exe  svpre-gcc-gfortran.exe  svpre.exe  svsolver-gcc-gfortran-nompi.exe  svsolver-nompi.exe
+```
+
+The current entrypoint is "svsolver-nompi.exe," indicating that there is no MPI,
+however ideally there would be automated builds providing several versions of MPI
+inside the container.
