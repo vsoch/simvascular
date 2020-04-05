@@ -2,7 +2,7 @@
 
 These are Docker builds of SimVascular and SvSolver intended to be run with Singularity.
 It clones and builds simvascular from the [SimVascular](https://github.com/Simvascular/SimVascular) repository
-master branch, and SvSolver from [it's respective repository]([SimVascular](https://github.com/Simvascular/SimVascular). 
+master branch, and SvSolver from [it's respective repository](https://github.com/Simvascular/SimVascular). 
 If you intend to use this to build a container for research,
 you should customize the Dockerfile build to install a release.
 
