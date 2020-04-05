@@ -1,0 +1,23 @@
+FROM ubuntu:18.04
+
+# docker build -f Dockerfile.svsolver -t vanessa/svsolver .
+# docker tag vanessa/svsolver:latest vanessa/svsolver:2020-04
+# docker push vanessa/svsolver
+# singularity pull docker://vanessa/svsolver:2020-04
+
+LABEL Maintainer vsochat@stanford.edu
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y git apt-utils wget gcc mpich gfortran cmake lsb-core
+
+WORKDIR /code
+
+# Prepare for install, file shouldn't have "sudo" hard-coded in it
+RUN git clone https://github.com/SimVascular/svSolver.git && \
+    cd svSolver/BuildWithMake && \
+    /bin/bash quick-build-linux.sh
+
+# Binaries (with .exe extensions?) are here
+env PATH=/code/svSolver/BuildWithMake/Bin:$PATH
+ENTRYPOINT ["svsolver-nompi.exe"]
