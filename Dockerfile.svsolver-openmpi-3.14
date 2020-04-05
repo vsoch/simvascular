@@ -1,0 +1,32 @@
+FROM ubuntu:18.04
+
+# OpenMPI/3.1.4-GCC-8.3.0
+
+# docker build -f Dockerfile.svsolver-openmpi-3.14 -t vanessa/svsolver:openmpi-3.14 .
+# docker push vanessa/svsolver
+# singularity pull docker://vanessa/svsolver:openmpi-3.13
+
+LABEL Maintainer vsochat@stanford.edu
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y git apt-utils wget gcc mpich gfortran cmake lsb-core
+
+WORKDIR /code
+
+# Prepare for install, file shouldn't have "sudo" hard-coded in it
+RUN git clone https://github.com/SimVascular/svSolver.git && \
+    cd svSolver/BuildWithMake && \
+    /bin/bash quick-build-linux.sh
+
+# Install some version of open MPI https://www.open-mpi.org/software/ompi/v4.0/
+RUN wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.4.tar.gz && \
+    tar -xzvf openmpi-3.1.4.tar.gz && \
+    cd openmpi-3.1.4 && \
+    ./configure --prefix=/usr/local && \
+    make && \
+    make install
+
+# Binaries (with .exe extensions?) are here
+ENV PATH /code/svSolver/BuildWithMake/Bin:$PATH
+ENTRYPOINT ["svsolver-nompi.exe"]

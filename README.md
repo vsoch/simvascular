@@ -6,15 +6,15 @@ master branch, and SvSolver from [it's respective repository](https://github.com
 If you intend to use this to build a container for research,
 you should customize the Dockerfile build to install a release.
 
-**Note** Both containers are using OpenMPI version 1.10.7 with an ubuntu 18.04 base!
-We will want to make a build recipe with a grid of builds that provide the bases and
-MPI flavors and versions that are most commonly needed.
+**Note** The Dockerfiles here are redundant in having one per openmpi version -
+we will want to make a build recipe with a grid of builds that provide the bases and
+MPI flavors and versions that are most commonly needed as build args.
 
 The intended use case is the following:
 
 # SimVascular
 
- - [Development containers on Docker Hub](https://hub.docker.com/r/vanessa/simvascular)
+ - [SimVascular with OpenMPI version 1.10.7](https://hub.docker.com/r/vanessa/simvascular) tags latest and 2020-04 built from [Dockerfile.simvascular](Dockerfile.simvascular)
 
 ## Build
 
@@ -99,8 +99,13 @@ module spider mpi
 
 # svSolver
 
- - [Development containers on Docker Hub](https://hub.docker.com/r/vanessa/svsolver)
+All containers are on Docker Hub under [vanessa/svsolver](https://hub.docker.com/r/vanessa/svsolver).
+Associated Dockerfiles and tags include:
 
+ - [Dockerfile.svsolver](Dockerfile.svsolver) builds svsolver with OpenMPI version 1.10.7, tags latest and 2020-04
+ - [Dockerfile.svsolver-openmpi-3.1.4](Dockerfile.svsolver-openmpi-3.1.4) builds svsolver with OpenMPI version 3.1.4, tags openmpi-3.1.14
+
+These Dockerfiles are reudundant and should be replaced with build args to determine versions.
 
 ## Build
 
